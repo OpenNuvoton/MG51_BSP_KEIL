@@ -1,0 +1,97 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/19/2023 10:43:17 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Output\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\main.c LARGE OMF2 OPTIMIZE(7,SPEED) BROWSE INCDIR(..\..\..\..\Library
+                    -\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\LST\main.lst) TABS(2) OBJECT(.\Output\main.obj)
+
+line level    source
+
+*** WARNING C500 IN LINE 1 OF ..\main.c: LICENSE ERROR (R219(1): FLOATING LICENSE FILE (*.FLF) NOT FOUND)
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* SPDX-License-Identifier: Apache-2.0                                                                    
+             - */
+   4          /* Copyright(c) 2023 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   5          /*                                                                                                        
+             - */
+   6          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   7          #include "MG51.H"
+   8          
+   9          /*********************************************************************************************************
+             -**/
+  10          /*  File Function: MG51 ADC compare mode                                                                  
+             - */ 
+  11          /*********************************************************************************************************
+             -**/
+  12          
+  13          void main (void)
+  14          {
+  15   1          /* Initial UART0 for pVrintf */
+  16   1          MODIFY_HIRC(HIRC_24);
+  17   1          Enable_UART0_VCOM_printf_24M_115200();
+  18   1          printf ("\n ADC compare mode for MG51 test start... ");
+  19   1      
+  20   1          ENABLE_ADC_AIN4;
+  21   1          clr_ADCCON0_ADCF;
+  22   1          /* ADC Sampling time setting*/
+  23   1          ADC_ConvertTime(ADC_ADCDIV2,ADC_ADCAQT5);
+  24   1        
+  25   1          /*Enable ADC comapre value*/
+  26   1          ADC_ComapreMode(ENABLE,0x03FF);
+  27   1          clr_ADCCON0_ADCF;
+  28   1          set_ADCCON0_ADCS; // ADC start trig signal
+  29   1      
+  30   1          while(1)
+  31   1          {
+  32   2              if (ADCF)
+  33   2              {
+  34   3                printf ("\n MG51 ADC compare value same as setting");
+  35   3                clr_ADCCON0_ADCF;
+  36   3                set_ADCCON0_ADCS;
+  37   3              }
+  38   2              else
+  39   2              {
+  40   3                 if (ADCCON2&SET_BIT4)
+  41   3                 {
+  42   4                    printf ("\n ADC value greater than comapre setting"); 
+  43   4                 }
+  44   3                 else if (!(ADCCON2&SET_BIT4))
+C51 COMPILER V9.60.0.0   MAIN                                                              05/19/2023 10:43:17 PAGE 2   
+
+  45   3                 {
+  46   4                    printf ("\n ADC value less than comapre setting"); 
+  47   4                 }
+  48   3              }
+  49   2              Timer0_Delay(24000000,500,1000);
+  50   2          }
+  51   1      
+  52   1      }
+  53          
+  54          
+  55          
+  56          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    250    ----
+   CONSTANT SIZE    =    163    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
